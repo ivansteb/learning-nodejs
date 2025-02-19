@@ -1,0 +1,34 @@
+{
+  "name": "curso-node-js",
+  "version": "1.0.0",
+  "description": "Mi primer curso de Nods JS básico",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivansteb/learning-nodejs.git"
+  },
+  "keywords": [
+    "curso",
+    "node",
+    "nodejs",
+    "ivan"
+  ],
+  "author": "Iván Agustín Ulises Stebler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivansteb/learning-nodejs/issues"
+  },
+  "homepage": "https://github.com/ivansteb/learning-nodejs#readme",
+  "dependencies": {
+    "picocolors": "1.1.1"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
