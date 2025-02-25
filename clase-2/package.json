@@ -4,7 +4,8 @@
   "main": "1.http.js",
   "scripts": {
     "dev:1": "nodemon 1.http.js",
-    "dev:2": "nodemon 2.routing.js"
+    "dev:2": "nodemon 2.routing.js",
+    "dev:3": "node --watch 3.express.js"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,8 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "express": "4.21.2"
   }
 }
