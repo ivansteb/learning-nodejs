@@ -7,6 +7,7 @@ const app = express()
 
 app.disable('x-powered-by')
 
+// Para parsear el body de las request
 app.use(express.json())
 
 // app.use((req, res, next) => {
