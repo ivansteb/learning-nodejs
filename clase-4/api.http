@@ -12,7 +12,6 @@ POST http://localhost:1234/movies
 Content-Type: application/json
 
 {
-    "sql": "SELECT * FROM users", // ignora el SQL Injection
     "title": "The Godfather",
     "year": 1975,
     "director": "Francis Ford Coppola",
@@ -23,6 +22,9 @@ Content-Type: application/json
         "Drama"
     ]
 }
+
+### Borrar una película
+DELETE http://localhost:1234/movies/c31b0958-1d46-47cd-906f-54517e7cb18f
 
 ### Actualizar una película parcialmente con PATCH
 PATCH http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
