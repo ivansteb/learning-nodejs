@@ -1,0 +1,67 @@
+### Recuperar todas las películas
+GET http://localhost:1234/movies
+
+### Recuperar una película por id
+GET http://localhost:1234/movies/cee21874-ffa3-11ef-a979-54ab3a2e9763
+
+### Recuperar todas las películas por un género
+GET http://localhost:1234/movies?genre=action
+
+### Crear una película con POST
+POST http://localhost:1234/movies
+Content-Type: application/json
+
+{
+    "title": "The Godfather III",
+    "year": 1995,
+    "director": "Francis Ford Coppola",
+    "duration": 200,
+    "poster": "https://img.fruugo.com/product/4/49/14441493_max.jpg",
+    "genre": [
+        "Crime",
+        "Drama",
+        "Action"
+    ]
+}
+
+### Borrar una película
+DELETE http://localhost:1234/movies/105249b4-0397-11f0-a979-54ab3a2e9763
+
+### Actualizar una película parcialmente con PATCH
+PATCH http://localhost:1234/movies/12b0d6a5-0394-11f0-a979-54ab3a2e9763
+Content-Type: application/json
+
+{
+    "title": "El Padrino",
+    "duration": 205,
+    "genre": ["Action"],
+    "poster": "https://img.fruugo.com/product/4/49/14441493_max.jpg",
+    "year": 1972,
+    "director": "Francis Ford Coppola",
+    "rate": 9.2
+}
+
+# ### Actualizar o crear una película con PUT
+# PUT http://localhost:1234/movies/e01c912d-0398-11f0-a979-54ab3a2e9763
+# Content-Type: application/json
+
+# {
+#     "duration": "240"
+# }
+
+
+
+
+### Principales diferencias de POST, PUT y PATCH
+
+#### POST: Crear un recurso en el servidor.
+##### URL: /movies
+##### No es idempotente.
+
+#### PUT: Crear (si no existe) o reemplazar un recurso en el servidor.
+##### URL: /movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+##### Es idempotente: el recurso siempre será el mismo.
+
+#### PATCH: Actualizar parcialmente un recurso en el servidor.
+##### URL: /movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+##### Es idempotente: el recurso siempre será el mismo. Pero depende de la implementación del servidor.
