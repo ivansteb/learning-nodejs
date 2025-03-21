@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chat</title>
+    <script type="module">
+        import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
+
+        const socket = io()
+
+        const form = document.querySelector('#form')
+        const input = document.querySelector('#input')
+        const messages = document.querySelector('#messages')
+
+        socket.on('Chat message', (msg) => {
+            const item = `<li>${msg}</li>`
+            messages.insertAdjacentHTML('beforeend', item)
+        })
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            if (input.value) {
+                socket.emit('Chat message', input.value)
+                input.value = ''
+            }
+        })
+    </script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            color-scheme: light dark;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: grid;
+            place-content: center;
+            height: 100vh;
+            padding: 36px 36px 100px 36px;
+            grid-template-rows: 1fr;
+            background-color: #333;
+        }
+
+        #messages {
+            list-style-type: none;
+            background-color: #555;
+            margin: 8px;
+        }
+
+        #messages > li {
+            padding: 8px;
+            margin: 4px;
+            background-color: #777;
+            border-radius: 4px;
+        }
+
+        #messages > li:nth-child(odd) {
+            background-color: #888;
+        }
+
+        #chat {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 350px;
+            height: 100%;
+            position: relative;
+        }
+
+        #form {
+            bottom: 0;
+            display: flex;
+            height: 48px;
+            left: 0;
+            right: 0;
+            padding: 4px;
+            margin: 12px;
+            position: absolute;
+        }
+
+        #input {
+            border-radius: 9999px;
+            border: 1px solid #eee;
+            flex: 1;
+            margin: 4px;
+            padding: 0 8px;
+        }
+
+        #input:focus {
+            outline: 0;
+        }
+
+        #form > button {
+            border-radius: 9999px;
+            background-color: #a0327d;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            margin: 4px;
+            padding: 0 16px;
+        }
+    </style>
+</head>
+<body>
+    <section id="chat">
+
+        <ul id="messages">
+
+        </ul>
+
+        <form id="form">
+            <input type="text" name="message" id="input" placeholder="Escriba un mensaje..." autocomplete="off" />
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+</body>
+</html>
