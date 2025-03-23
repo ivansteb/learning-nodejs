@@ -1,5 +1,8 @@
 import express from 'express'
-import { PORT } from './config.js'
+import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser'
+
+import { PORT, SECRET_JWT_KEY } from './config.js'
 import { UserRepository } from './user-repository.js'
 
 const app = express()
@@ -7,8 +10,18 @@ const app = express()
 app.set('view engine', 'ejs')
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
+    const token = req.cookies.access_token
+
+    try {
+        const data = jwt.verify(token, SECRET_JWT_KEY)
+        return res.render('protected', data) // data = { _id, username }
+    } catch (error) {
+        res.status(401).send('No tienes permiso para acceder a esta página')
+    }
+
     res.render('index')
 })
 
@@ -16,7 +29,20 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body
     try {
         const user = await UserRepository.login({ username, password })
-        res.send(user)
+        const token = jwt.sign(
+            { id: user._id, username: user.username }, 
+            SECRET_JWT_KEY, 
+            {
+                expiresIn: '1h'
+            })
+        res
+            .cookie('access_token', token, {
+                httpOnly: true, // la cookie solo se puede acceder desde el servidor
+                secure: process.env.NODE_ENV === 'production', // la cookie solo se puede enviar por HTTPS
+                sameSite: 'strict', // la cookie solo se puede acceder en el mismo dominio
+                maxAge: 1000 * 60 * 60 // 1 hora
+            })
+            .send({ user })
     } catch (error) {
         res.status(401).send(error.message)
     }
@@ -39,9 +65,17 @@ app.post('/logout', (req, res) => {
 })
 
 app.get('/protected', (req, res) => {
-    // To Do: if sesión del usuario
-    res.render('protected', { username: 'Ivan' })
-    // To Do: else 401
+    const token = req.cookies.access_token
+    if (!token) {
+        return res.status(403).send('No tienes permiso para acceder a esta página')
+    }
+
+    try {
+        const data = jwt.verify(token, SECRET_JWT_KEY)
+        res.render('protected', data) // data = { _id, username }
+    } catch (error) {
+        res.status(401).send('No tienes permiso para acceder a esta página')
+    }
 })
 
 
