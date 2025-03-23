@@ -7,15 +7,20 @@
     <script type="module">
         import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
 
-        const socket = io()
+        const socket = io({
+            auth: {
+                serverOffset: 0
+            }
+        })
 
         const form = document.querySelector('#form')
         const input = document.querySelector('#input')
         const messages = document.querySelector('#messages')
 
-        socket.on('Chat message', (msg) => {
+        socket.on('Chat message', (msg, serverOffset) => {
             const item = `<li>${msg}</li>`
             messages.insertAdjacentHTML('beforeend', item)
+            socket.auth.serverOffset = serverOffset
         })
 
         form.addEventListener('submit', (e) => {
