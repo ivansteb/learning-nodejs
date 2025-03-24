@@ -12,17 +12,21 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(cookieParser())
 
-app.get('/', (req, res) => {
+app.use((req, res, next) => {
     const token = req.cookies.access_token
+    req.session = { user: null }
 
     try {
         const data = jwt.verify(token, SECRET_JWT_KEY)
-        return res.render('protected', data) // data = { _id, username }
-    } catch (error) {
-        res.status(401).send('No tienes permiso para acceder a esta página')
-    }
+        req.session.user = data
+    } catch {}
 
-    res.render('index')
+    next()
+})
+
+app.get('/', (req, res) => {
+    const { user } = req.session
+    res.render('index', user)
 })
 
 app.post('/login', async (req, res) => {
@@ -61,23 +65,18 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/logout', (req, res) => {
-
+    res
+        .clearCookie('access_token')
+        .json({ message: 'Logged out' })
 })
 
 app.get('/protected', (req, res) => {
-    const token = req.cookies.access_token
-    if (!token) {
+    const { user } = req.session
+    if (!user) {
         return res.status(403).send('No tienes permiso para acceder a esta página')
     }
-
-    try {
-        const data = jwt.verify(token, SECRET_JWT_KEY)
-        res.render('protected', data) // data = { _id, username }
-    } catch (error) {
-        res.status(401).send('No tienes permiso para acceder a esta página')
-    }
+    res.render('protected', user)
 })
-
 
 
 app.listen(PORT, () => {
